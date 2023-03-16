@@ -1,8 +1,27 @@
 
+require('dotenv').config()
+const { Sequelize } = require('sequelize');
+const Sequelize = require("sequelize")
+
+const { CONNECTION_STRING } = process.env;
+
+const Sequelize = new Sequelize(CONNECTION_STRING, {
+    dialect: 'postgres',
+  dialectOptions: {
+      ssl: {
+          rejectUnauthorized: false
+      }
+  }
+})
 
 module.exports = {
     seed: (req, res) => {
         sequelize.query(`
+        app.delete('/cities/:id', deleteCity)
+
+
+
+
             drop table if exists cities;
             drop table if exists countries;
 
@@ -12,6 +31,16 @@ module.exports = {
             );
 
             *****YOUR CODE HERE*****
+
+create table cities(
+    cities_id serial primary key,
+    name varchar(Amsterdam),
+    rating integar,
+    country_id integer references countries(country_id),
+
+);
+
+
 
             insert into countries (name)
             values ('Afghanistan'),
@@ -209,9 +238,54 @@ module.exports = {
             ('Yemen'),
             ('Zambia'),
             ('Zimbabwe');
+            
         `).then(() => {
             console.log('DB seeded!')
             res.sendStatus(200)
         }).catch(err => console.log('error seeding DB', err))
-    }
+    },
+    getCountries: (req, res) => [
+      sequelize
+      .query('SELECT * FROM countries')
+      .then((dbRes) => res.status(200).send(dbRes[0]))
+      .catch((err) =>console.log(err))
+    ],
+getCities: (req, res) => {
+    sequelize.query('SELECT city-id, cities.name AS city, rating, countries.country_id, countries.name AS country FROM countries INNER JOIN cities ON cities.country_id = countries.country_id ORDER BY rating DESC; ');
 }
+.then((dbRes) => res.status(200).send(dbRes[0]));
+};
+
+
+deleteCities: (req, res) => [
+    sequelize
+    .query('SELECT * FROM countries')
+    .then((dbRes) => res.status(200).send(dbRes[0]))
+    .catch((err) =>console.log(err))
+  ],
+
+deleteCities: (req, res) => {
+  sequelize.query('SELECT city-id, cities.name AS city, rating, countries.country_id, countries.name AS country FROM countries INNER JOIN cities ON cities.country_id = countries.country_id ORDER BY rating DESC; ');
+}
+.then((dbRes) => res.status(200).send(dbRes[0]));
+
+};
+
+module.exports = {
+    seed: (req, res) => {
+        sequelize.query(`
+            drop table if exists cities;
+            drop table if exists countries;
+
+            create table countries (
+                country_id serial primary key, 
+                name varchar
+            ); 
+
+
+  sequelize.query(`
+`).then(result => {
+  console.log(result);
+}).catch(err => {
+  console.error(err);
+})

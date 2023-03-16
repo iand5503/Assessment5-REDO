@@ -10,7 +10,8 @@ function handleSubmit(e) {
         alert ('You must enter a city name')
         return
     }
-
+    app.post('/seed', seed)
+    app.get('/countries', getCountries)
     let userRating = document.querySelector('input[name="rating"]:checked').value
     let body = {
         name: nameInput.value, 
